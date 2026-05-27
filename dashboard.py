@@ -30,7 +30,14 @@ st.markdown("""
 footer{visibility:hidden}
 </style>""", unsafe_allow_html=True)
 
-DB = "/tmp/apmi_pms.db"
+# Find DB wherever it is
+import pathlib
+_db_candidates = [
+    pathlib.Path(__file__).parent / "apmi_pms.db",  # Streamlit Cloud
+    pathlib.Path("/tmp/apmi_pms.db"),                # Colab
+    pathlib.Path("/content/drive/MyDrive/APMI_PMS/apmi_pms.db"),  # Colab Drive
+]
+DB = str(next((p for p in _db_candidates if p.exists()), _db_candidates[0]))
 COLORS = {"Equity":"#2563eb","Debt":"#7c3aed","Hybrid":"#059669","Multi Asset":"#d97706","benchmark":"#f59e0b","Inflow":"#16a34a"}
 RET = {"return_1m":"1M","return_3m":"3M","return_6m":"6M","return_1y":"1Y","return_3y":"3Y","return_5y":"5Y","return_si":"SI"}
 CAGR = {"return_1y","return_3y","return_5y","return_si"}
